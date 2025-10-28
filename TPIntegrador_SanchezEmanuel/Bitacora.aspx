@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Welcome_Client.aspx.cs" Inherits="TPIntegrador_SanchezEmanuel.Welcome_Client" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Bitacora.aspx.cs" Inherits="TPIntegrador_SanchezEmanuel.Bitacora" %>
 
 <!DOCTYPE html>
 
@@ -10,7 +10,6 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <h1>Pagina Provisoria Cliente</h1>
         </div>
     </form>
 </body>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BE;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,12 +12,12 @@ namespace TPIntegrador_SanchezEmanuel
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["tipousuario"].ToString() != "WebMaster")
+
+            if (Session["tipousuario"] == null || Session["tipousuario"].ToString() != "WebMaster")
             {
                 Response.Redirect("Error.aspx");
             }
         }
-
         protected void btnBackup_Click(object sender, EventArgs e)
         {
 
@@ -34,7 +35,11 @@ namespace TPIntegrador_SanchezEmanuel
 
         protected void btnSalir_Click(object sender, EventArgs e)
         {
-
+            UsuarioBE usuario = new UsuarioBE();
+            usuario.nombre = Session["usuario"].ToString();
+            //BLL_Bitacora bll = new BLL_Bitacora();
+            //us.Registrar(usuario, "Log out");
+            Response.Redirect("Default.aspx");
         }
     }
 }

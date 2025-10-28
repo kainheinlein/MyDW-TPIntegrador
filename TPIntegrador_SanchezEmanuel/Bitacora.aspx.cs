@@ -7,14 +7,11 @@ using System.Web.UI.WebControls;
 
 namespace TPIntegrador_SanchezEmanuel
 {
-    public partial class Welcome_Client : System.Web.UI.Page
+    public partial class Bitacora : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["tipousuario"] == null || Session["tipousuario"].ToString() != "Cliente")
-            {
-                Response.Redirect("Error.aspx");
-            }
+
         }
     }
 }

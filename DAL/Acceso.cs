@@ -11,7 +11,7 @@ namespace DAL
     public class Acceso
     {
         private SqlConnection _conexion;
-        private readonly string cadenaSQL = @"Data Source=kainvm\SQLDEVELOPER;Initial Catalog=TP SOFTWARE;Integrated Security=True";
+        private readonly string cadenaSQL = @"Data Source=kainvm\SQLDEVELOPER;Initial Catalog=TP SOFTWARE;Integrated Security=True;";
         public SqlConnection conexion { get => _conexion; }
 
         private void AbrirConexion()
@@ -27,7 +27,7 @@ namespace DAL
 
         private SqlConnection ObtenerConexion()
         {
-            return new SqlConnection(@"Data Source=kainvm\SQLDEVELOPER;Initial Catalog=TP SOFTWARE;Integrated Security=True");
+            return new SqlConnection(cadenaSQL);
         }
 
         public DataTable LeerTabla(string sp, SqlParameter[] datos)
@@ -115,71 +115,14 @@ namespace DAL
             catch (Exception e) { CerrarConexion(); throw e; }
         }
 
-        //protected int ExecuteCommand(string spName, List<SqlParameter> parametros)
-        //{
-        //    try
-        //    {
-        //        SqlCommand command = new SqlCommand(spName, ObtenerConexion());
-
-        //        if (parametros != null)
-        //        {
-        //            foreach (SqlParameter param in parametros)
-        //            {
-        //                command.Parameters.AddWithValue(param.ParameterName, param.Value);
-        //            }
-        //        }
-
-        //        command.CommandType = CommandType.StoredProcedure;
-
-        //        if (command.Connection.State == System.Data.ConnectionState.Closed)
-        //            command.Connection.Open();
-
-        //        return command.ExecuteNonQuery();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        throw ex;
-        //    }
-        //}
-
-        //protected DataTable ExecuteReader(string SpName, List<SqlParameter> parametros)
-        //{
-        //    try
-        //    {
-        //        DataTable table = new DataTable();
-        //        SqlCommand command = new SqlCommand(SpName, ObtenerConexion());
-
-        //        if (parametros != null)
-        //        {
-        //            foreach (SqlParameter param in parametros)
-        //            {
-        //                command.Parameters.AddWithValue(param.ParameterName, param.Value);
-        //            }
-        //        }
-        //        command.CommandType = System.Data.CommandType.StoredProcedure;
-
-        //        if (command.Connection.State == System.Data.ConnectionState.Closed)
-        //            command.Connection.Open();
-
-        //        table.Load(command.ExecuteReader());
-
-        //        return table;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
-
-        //protected void DirectSQL(string query)
-        //{
-        //    SqlCommand cmd = new SqlCommand(query, ObtenerConexion());
-        //    if (cmd.Connection.State == ConnectionState.Closed)
-        //    {
-        //        cmd.Connection.Open();
-        //    }
-        //    cmd.ExecuteNonQuery();
-        //}
+        public int DirectSQLResult(string query)
+        {
+            SqlCommand cmd = new SqlCommand(query, ObtenerConexion());
+            if (cmd.Connection.State == ConnectionState.Closed)
+            {
+                cmd.Connection.Open();
+            }
+            return (int)cmd.ExecuteScalar();
+        }
     }
 }

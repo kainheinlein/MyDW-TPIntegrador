@@ -41,6 +41,15 @@ namespace BE
 			get { return _tipoUs; }
 			set { _tipoUs = value; }
 		}
+
+		private string _DVH;
+
+		public string DVH
+		{
+			get { return _DVH; }
+			set { _DVH = value; }
+		}
+
 		public UsuarioBE() { }
 
 		public UsuarioBE CrearUsuario(int id, string nom, string contra, string tipo)

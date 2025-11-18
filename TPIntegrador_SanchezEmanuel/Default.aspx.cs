@@ -19,6 +19,8 @@ namespace TPIntegrador_SanchezEmanuel
         }
 
         UsuarioBLL usuarioBLL = new UsuarioBLL();
+        BitacoraBLL bitacoraBLL  = new BitacoraBLL();
+        DigitoBLL digitoBLL = new DigitoBLL();
 
         protected void btnIniciar_Click(object sender, EventArgs e)
         {
@@ -30,18 +32,33 @@ namespace TPIntegrador_SanchezEmanuel
                 if (usuarioBE != null)
                 {
                     Session["tipousuario"] = usuarioBE.tipoUs;
+                    Session["errores"] = digitoBLL.VerificarDigito();
 
-                    if (Session["tipousuario"].ToString() == "WebMaster")
+                    if (Session["errores"].ToString() == "")
                     {
-                        //BLL_bitacora bit = new BLL_bitacora();
-                        //bit.CargarEntrada(user, DateTime.Now.AddMinutes);
-                        Response.Redirect("Welcome_WebMaster.aspx");
+                        if (Session["tipousuario"].ToString() == "WebMaster")
+                        {
+                            bitacoraBLL.Registrar(usuarioBE.nombre, "Sesion Iniciada");
+                            Response.Redirect("Welcome_WebMaster.aspx");
+                        }
+                        else if (Session["tipousuario"].ToString() == "Cliente")
+                        {
+                            bitacoraBLL.Registrar(usuarioBE.nombre, "Sesion Iniciada");
+                            Response.Redirect("Welcome_Client.aspx");
+                        }
                     }
-                    else if (Session["tipousuario"].ToString() == "Cliente")
+                    else
                     {
-                        Response.Redirect("Welcome_Client.aspx");
-                    }
-                }
+                        if (Session["tipousuario"].ToString() == "WebMaster")
+                        {
+                            Response.Redirect("Error_Webmaster.aspx");
+                        }
+                        else if (Session["tipousuario"].ToString() == "Cliente")
+                        {
+                            lblMensaje.Text = "Se detecto error. Por favor contactar a WebMaster.";
+                        }
+                    }                    
+                } else { lblMensaje.Text = "No se encontro usuario. Por favor verifique que este bien escrito el usuario y la contraseña"; }
             }
             catch (System.Threading.ThreadAbortException) { }
             catch(Exception ex)

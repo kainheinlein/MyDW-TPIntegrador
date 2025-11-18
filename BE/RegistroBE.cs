@@ -39,5 +39,13 @@ namespace BE
             get { return _fecha; }
             set { _fecha = value; }
         }
+
+        private string _DVH;
+
+        public string DVH
+        {
+            get { return _DVH; }
+            set { _DVH = value; }
+        }
     }
 }

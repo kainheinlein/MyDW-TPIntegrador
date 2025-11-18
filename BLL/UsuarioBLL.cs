@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DAL;
 using Microsoft.Win32;
+using System.Data;
 
 namespace BLL
 {
@@ -27,12 +28,43 @@ namespace BLL
                 user = usuarioMP.Login(user);
             }
             else user = null;
-
-            if (user != null)
-            {
-                //bitacora.Registrar(user, "Login");
-            }
             return user;
+        }
+
+        public DataTable getTabla()
+        {
+            DataTable data = usuarioMP.getTabla();
+            return data;
+        }
+
+        public string getDV(UsuarioBE u)
+        {
+            return Encriptador.GetSHA256($"{u.id}|{u.nombre}|{u.contra}|{u.tipoUs}");
+        }
+
+        public List<UsuarioBE> Listar()
+        {
+            List<UsuarioBE> lista = new List<UsuarioBE>();
+            lista = usuarioMP.ListarTodos();
+            return lista;
+        }
+
+        public void ActualizarDVH()
+        {
+            List<UsuarioBE> list = new List<UsuarioBE>();
+            list = Listar();
+            foreach (UsuarioBE u in list)
+            {
+                u.DVH = getDV(u);
+                usuarioMP.ModificarUsuario(u);
+            }
+        }
+
+        public void ActualizarDVV()
+        {
+            DigitoBLL digitoBLL = new DigitoBLL();
+            string nuevoDVV = digitoBLL.CalcularDigito(getTabla());
+            digitoBLL.ModificarDigito("Usuario", nuevoDVV);
         }
     }
 }

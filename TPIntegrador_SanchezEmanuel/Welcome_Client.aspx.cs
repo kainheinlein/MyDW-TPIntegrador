@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Xml;
 
 namespace TPIntegrador_SanchezEmanuel
 {
@@ -14,13 +15,20 @@ namespace TPIntegrador_SanchezEmanuel
         ProductoBLL productoBLL = new ProductoBLL();
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["tipousuario"] == null || Session["tipousuario"].ToString() != "Cliente")
+            if (!IsPostBack)
             {
-                Response.Redirect("Error.aspx");
-            }
+                if (Session["tipousuario"] == null || Session["tipousuario"].ToString() != "Cliente")
+                {
+                    Response.Redirect("Error.aspx");
+                }
 
-            gvProductos.DataSource = productoBLL.ListarProductos();
-            gvProductos.DataBind();
+                List<ProductoBE> listaProductos = productoBLL.ListarProductos();
+                List<ItemCarritoBE> carrito = new List<ItemCarritoBE>();
+                gvProductos.DataSource = listaProductos;
+                gvProductos.DataBind();
+                Session["ProductosTemp"] = listaProductos;
+                Session["Carrito"] = carrito;
+            }
         }
 
         protected void gridProductos_SelectedIndexChanged(object sender, EventArgs e)
@@ -33,6 +41,8 @@ namespace TPIntegrador_SanchezEmanuel
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
+            List < ProductoBE > catalogo = (List<ProductoBE>) Session["ProductosTemp"];
+
             if (gvProductos.SelectedIndex == -1)
             {
                 lblError.Text = "¡Selecciona un producto de la lista primero!";
@@ -46,40 +56,47 @@ namespace TPIntegrador_SanchezEmanuel
                 return;
             }
 
-            // Crear el item
-            // Nota: En un caso real, el precio lo sacas de la DB o del Grid (Cells[3]) limpiando el símbolo $
-            string precioTexto = gvProductos.SelectedRow.Cells[3].Text.Replace("$", "").Replace(".", ""); // Ojo con el parseo de moneda según región
-
-            // Simplificación para el ejemplo: uso precios fijos o parseo simple
-            decimal precio = 1000; // Valor por defecto si falla el parseo visual
-
-            ProductoBE nuevoItem = new ProductoBE
+            //Busqueda de producto seleccionado
+            int seleccion = Convert.ToInt32(gvProductos.SelectedDataKey.Value);
+            ProductoBE prodSeleccionado = catalogo.FirstOrDefault(x => x.codigo == seleccion);
+            if (cantidad <= prodSeleccionado.stock)
             {
-                codigo = int.Parse(gvProductos.SelectedRow.Cells[1].Text),
-                producto = gvProductos.SelectedRow.Cells[2].Text,
-                precio = precio, // Aquí deberías tomar el valor real numérico
-                stock = cantidad
-            };
+                prodSeleccionado.stock -= cantidad;
+                ItemCarritoBE itemCarrito = new ItemCarritoBE
+                {
+                    codigo = prodSeleccionado.codigo,
+                    producto = prodSeleccionado.producto,
+                    preUnitario = prodSeleccionado.precio,
+                    cantidad = cantidad,
+                    subtotal = prodSeleccionado.precio * cantidad
+                };
 
-            // Guardar en Session
-            List<ProductoBE> carrito = (List<ProductoBE>)Session["Carrito"];
-            carrito.Add(nuevoItem);
-            Session["Carrito"] = carrito;
+                //Guardado de item en Sesion Carrito
+                List<ItemCarritoBE> carrito = (List<ItemCarritoBE>)Session["Carrito"];
+                carrito.Add(itemCarrito);
+                Session["Carrito"] = carrito;
 
-            // Actualizar vista
-            //ActualizarCarritoView();
+                //Carga de items en Lista Carrito
+                lvCarrito.DataSource = carrito;
+                lvCarrito.DataBind();
 
-            // Reset visual
-            gvProductos.SelectedIndex = -1;
-            lblProductoSeleccionado.Text = "Ninguno";
-            txtCantidad.Text = "1";
+                gvProductos.SelectedIndex = -1;
+                lblProductoSeleccionado.Text = "Ninguno";
+                txtCantidad.Text = "1";
+
+                gvProductos.DataSource = catalogo;
+                gvProductos.DataBind();
+
+                ActualizarCarritoView();
+            }
+            else lblError.Text = "La cantidad elegida supera el stock disponible";
         }
 
-        // Evento: Botón QUITAR
         protected void btnQuitar_Click(object sender, EventArgs e)
         {
-            List<ProductoBE> carrito = (List<ProductoBE>)Session["Carrito"];
-            List<ProductoBE> itemsAEliminar = new List<ProductoBE>();
+            List<ItemCarritoBE> carrito = (List<ItemCarritoBE>)Session["Carrito"];
+            List<ProductoBE> catalogo = (List<ProductoBE>)Session["ProductosTemp"];
+            List<ItemCarritoBE> itemsAEliminar = new List<ItemCarritoBE>();
 
             // Recorrer el ListView para ver cuáles tienen el Checkbox marcado
             foreach (ListViewItem item in lvCarrito.Items)
@@ -99,28 +116,55 @@ namespace TPIntegrador_SanchezEmanuel
             foreach (var item in itemsAEliminar)
             {
                 carrito.Remove(item);
+                var itemCatalogo = catalogo.FirstOrDefault(x => x.codigo == item.codigo);
+                itemCatalogo.stock += item.cantidad;
             }
             Session["Carrito"] = carrito;
-            //ActualizarCarritoView();
+            lvCarrito.DataSource = carrito;
+            lvCarrito.DataBind();
+
+            gvProductos.DataSource = catalogo;
+            gvProductos.DataBind();
+
+            ActualizarCarritoView();
         }
 
-        // Evento: Botón ENVIAR (Confirmar)
         protected void btnEnviar_Click(object sender, EventArgs e)
         {
-            List<ProductoBE> carrito = (List<ProductoBE>)Session["Carrito"];
+            List<ItemCarritoBE> carrito = (List<ItemCarritoBE>)Session["Carrito"];
             if (carrito.Count == 0) return;
 
-            decimal total = carrito.Sum(x => x.precio);
+            string nombreArchivo = "Pedido_" + Session["Usuario"] + ".xml";
+            string rutaFisicaCompleta = Server.MapPath("~/App_Data/" + nombreArchivo);
 
-            // AQUÍ GUARDARÍAS EL PEDIDO EN LA BASE DE DATOS (SQL INSERT)
+            try
+            {
 
-            // Simulamos éxito
-            string script = $"alert('¡Pedido enviado! Monto total a facturar: ${total}');";
-            ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
+                VentaBLL gestorVentas = new VentaBLL();
+                gestorVentas.GuardarCarrito(carrito, rutaFisicaCompleta);
 
-            // Limpiar carrito
-            Session["Carrito"] = new List<ProductoBE>();
-            //ActualizarCarritoView();
+                Session["Carrito"] = new List<ProductoBE>();
+
+                // 4. REDIRIGIR a la página de pago, pasando el nombre del archivo
+                Response.Redirect("ConfirmacionVenta.aspx?file=" + nombreArchivo);
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "Error al guardar el pedido temporal: " + ex.Message;
+            }
+        }
+        private void ActualizarCarritoView()
+        {
+            List<ItemCarritoBE> carrito = Session["Carrito"] as List<ItemCarritoBE>;
+            if (carrito == null) { carrito = new List<ItemCarritoBE>(); }
+
+            decimal total = carrito.Sum(x => x.subtotal);
+
+            lvCarrito.DataSource = carrito;
+            lvCarrito.DataBind();
+
+            // Mostramos el total usando "C" para formato de Moneda
+            lblTotal.Text = total.ToString("C");
         }
     }
 }

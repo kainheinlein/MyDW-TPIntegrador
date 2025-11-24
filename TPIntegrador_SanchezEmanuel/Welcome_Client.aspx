@@ -110,7 +110,7 @@
                     <LayoutTemplate>
                         <div style="width:100%;">
                             <div style="font-weight:bold; padding:5px; border-bottom:2px solid #333;">
-                                <span>Cant.</span> - <span>Producto</span> - <span>Subtotal</span>
+                                <span>Cant.</span> - <span>Producto</span> - <span>Precio</span>
                             </div>
                             <div id="itemPlaceholder" runat="server"></div>
                         </div>
@@ -119,10 +119,10 @@
                         <div class="cart-item">
                             <span>
                                 <asp:CheckBox ID="chkSeleccion" runat="server" />
-                                <strong><%# Eval("Cantidad") %> x</strong> <%# Eval("Nombre") %>
+                                <strong><%# Eval("Cantidad") %> x</strong> <%# Eval("Producto") %>
                             </span>
-                            <span><%# Eval("Subtotal", "{0:C}") %></span>
-                            <asp:HiddenField ID="hfID" runat="server" Value='<%# Eval("ID") %>' />
+                            <span><%# Eval("preUnitario", "{0:C}") %></span>
+                            <asp:HiddenField ID="hfID" runat="server" Value='<%# Eval("Codigo") %>' />
                         </div>
                     </ItemTemplate>
                     <EmptyDataTemplate>

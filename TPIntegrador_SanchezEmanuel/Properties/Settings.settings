@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TPIntegrador_SanchezEmanuel.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="TPIntegrador_SanchezEmanuel_localhost_RealizarVenta" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://localhost:44326/RealizarVenta.asmx</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

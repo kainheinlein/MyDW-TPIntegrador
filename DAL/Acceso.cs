@@ -1,10 +1,15 @@
-﻿using System;
+﻿using BE;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace DAL
 {
@@ -113,6 +118,32 @@ namespace DAL
                 return dr;
             }
             catch (Exception e) { CerrarConexion(); throw e; }
+        }
+
+        public void GuardarCarritoXML(List<ItemCarritoBE> carrito, string rutaCompleta)
+        {
+            // La serialización convierte la lista de objetos en el formato XML
+            XmlSerializer serializer = new XmlSerializer(typeof(List<ItemCarritoBE>));
+
+            // Escribe en la ruta física, asegurando que se cierre el archivo (using)
+            using (TextWriter writer = new StreamWriter(rutaCompleta))
+            {
+                serializer.Serialize(writer, carrito);
+            }
+        }
+
+        public XmlDocument LeerCarritoXML(string ruta)
+        {
+            XmlDocument documento = new XmlDocument();
+            // Usamos XmlTextReader para manejar el archivo de forma eficiente
+            // y evitar problemas con espacios en blanco.
+            using (XmlTextReader reader = new XmlTextReader(ruta))
+            {
+                reader.WhitespaceHandling = WhitespaceHandling.None;
+                documento.Load(reader);
+                // El 'using' asegura que el 'reader' se cierre automáticamente
+            }
+            return documento;
         }
 
         public int DirectSQLResult(string query)

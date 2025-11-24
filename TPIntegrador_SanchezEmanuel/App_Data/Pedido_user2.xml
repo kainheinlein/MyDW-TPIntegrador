@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfItemCarritoBE xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ItemCarritoBE>
-    <codigo>65</codigo>
-    <producto>Aceite Cocinero 1.5 L</producto>
-    <preUnitario>4600.00</preUnitario>
-    <cantidad>8</cantidad>
-    <subtotal>36800.00</subtotal>
+    <codigo>1</codigo>
+    <producto>Coca-Cola 1.5L</producto>
+    <preUnitario>3000.00</preUnitario>
+    <cantidad>4</cantidad>
+    <subtotal>12000.00</subtotal>
   </ItemCarritoBE>
 </ArrayOfItemCarritoBE>

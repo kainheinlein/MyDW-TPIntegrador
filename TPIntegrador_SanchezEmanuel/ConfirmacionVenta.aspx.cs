@@ -49,8 +49,9 @@ namespace TPIntegrador_SanchezEmanuel
                     lblMensajeMayorista.Visible = false;
                 }
 
-                lblTotalAPagar.Text = listaCarrito.Sum(x => x.subtotal).ToString("C");
-                //Implementar WebService!!!
+                decimal subtotal = listaCarrito.Sum(x => x.subtotal);
+                Session["subtotal"] = subtotal;
+                lblTotalAPagar.Text = subtotal.ToString("C");
             }           
         }
 
@@ -58,7 +59,7 @@ namespace TPIntegrador_SanchezEmanuel
         {
             RealizarVenta ws = new RealizarVenta();
 
-            decimal total = ws.GenerarVenta(Convert.ToInt32(Session["CantidadItems"]), Convert.ToDecimal(lblTotalAPagar.Text));
+            decimal total = ws.GenerarVenta(Convert.ToInt32(Session["CantidadItems"]), Convert.ToDecimal(Session["subtotal"]));
             Session["total"] = total;
             Response.Redirect("VentaRealizada.aspx");
         }

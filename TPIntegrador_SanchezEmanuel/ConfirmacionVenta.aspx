@@ -17,7 +17,7 @@
         
         /* Estilos del Total y Mensaje Mayorista */
         .summary-box { text-align: right; margin-top: 30px; }
-        .wholesale-message { color: orange; font-weight: bold; margin-bottom: 10px; font-size: 0.9em; display: none; } /* Inicialmente oculto */
+        .wholesale-message { color: orange; font-weight: bold; margin-bottom: 10px; font-size: 0.9em; }
         .total-label { font-size: 1.8em; font-weight: bold; color: #333; }
         
         /* Botón Pagar */

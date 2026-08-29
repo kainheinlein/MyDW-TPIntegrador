@@ -11,14 +11,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
     <style>
         :root {
-            --brand-dark: #1a237e;
-            --brand: #2962ff;
-            --brand-light: #6a8bff;
-            --text: #1f2430;
-            --muted: #6b7280;
-            --border: #e2e6ee;
-            --danger: #d32f2f;
-            --danger-bg: #fdecea;
+            --brand-dark: #0b3d24;
+            --brand: #22c55e;
+            --brand-light: #4ade80;
+            --black: #0a0a0a;
+            --surface: #161616;
+            --surface-alt: #1f1f1f;
+            --text: #f2f2f2;
+            --muted: #9a9a9a;
+            --border: #333333;
+            --danger: #ff5a5f;
+            --danger-bg: rgba(220, 38, 38, 0.14);
         }
 
         * { box-sizing: border-box; }
@@ -31,9 +34,9 @@
         body {
             font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
             background:
-                radial-gradient(circle at 15% 20%, rgba(105, 139, 255, 0.35), transparent 45%),
-                radial-gradient(circle at 85% 80%, rgba(26, 35, 126, 0.35), transparent 45%),
-                linear-gradient(135deg, #10163a 0%, #1a237e 55%, #2962ff 100%);
+                radial-gradient(circle at 15% 20%, rgba(34, 197, 94, 0.25), transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(11, 61, 36, 0.35), transparent 45%),
+                linear-gradient(135deg, #000000 0%, #021a10 55%, #042b1c 100%);
             background-attachment: fixed;
             display: flex;
             justify-content: center;
@@ -44,10 +47,11 @@
 
         .login-container {
             position: relative;
-            background-color: #ffffff;
+            background-color: var(--surface);
             padding: 44px 44px 36px;
             border-radius: 18px;
-            box-shadow: 0 25px 60px rgba(10, 15, 45, 0.35);
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(34, 197, 94, 0.15);
             width: 380px;
             max-width: 100%;
             text-align: center;
@@ -68,7 +72,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 20px rgba(41, 98, 255, 0.35);
+            box-shadow: 0 10px 24px rgba(34, 197, 94, 0.45);
         }
 
         .brand-badge svg {
@@ -113,19 +117,23 @@
             font-family: inherit;
             font-size: 15px;
             color: var(--text);
-            background-color: #f9fafc;
+            background-color: var(--surface-alt);
             transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
         }
 
+        .textbox-style::placeholder {
+            color: #6b6b6b;
+        }
+
         .textbox-style:hover {
-            border-color: #c7cfe0;
+            border-color: #4a4a4a;
         }
 
         .textbox-style:focus {
             outline: none;
             border-color: var(--brand);
-            background-color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(41, 98, 255, 0.12);
+            background-color: #262626;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
         }
 
         .login-button {
@@ -141,13 +149,13 @@
             font-weight: 700;
             letter-spacing: 0.01em;
             cursor: pointer;
-            box-shadow: 0 8px 18px rgba(41, 98, 255, 0.3);
+            box-shadow: 0 8px 18px rgba(34, 197, 94, 0.4);
             transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
         }
 
         .login-button:hover {
-            filter: brightness(1.08);
-            box-shadow: 0 10px 22px rgba(41, 98, 255, 0.4);
+            filter: brightness(1.1);
+            box-shadow: 0 10px 24px rgba(34, 197, 94, 0.55);
         }
 
         .login-button:active {
@@ -163,18 +171,20 @@
             font-weight: 600;
             color: var(--danger);
             background-color: var(--danger-bg);
+            border: 1px solid rgba(220, 38, 38, 0.3);
         }
 
         .error-message:empty {
             display: none;
             margin: 0;
             padding: 0;
+            border: none;
         }
 
         .footer-note {
             margin-top: 28px;
             font-size: 12px;
-            color: #b7bdca;
+            color: #5c5c5c;
         }
     </style>
 

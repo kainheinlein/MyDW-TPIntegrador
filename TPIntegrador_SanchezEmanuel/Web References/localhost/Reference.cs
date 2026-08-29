@@ -35,7 +35,7 @@ namespace TPIntegrador_SanchezEmanuel.localhost {
         
         /// <remarks/>
         public RealizarVenta() {
-            this.Url = global::TPIntegrador_SanchezEmanuel.Properties.Settings.Default.TPIntegrador_SanchezEmanuel_localhost_RealizarVenta;
+            this.Url = "https://localhost:44326/RealizarVenta.asmx";
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;

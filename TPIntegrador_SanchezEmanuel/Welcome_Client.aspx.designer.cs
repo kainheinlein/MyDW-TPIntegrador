@@ -75,7 +75,16 @@ namespace TPIntegrador_SanchezEmanuel
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView lvCarrito;
+        protected global::System.Web.UI.WebControls.Repeater lvCarrito;
+
+        /// <summary>
+        /// Control lblCarritoVacio.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCarritoVacio;
 
         /// <summary>
         /// Control btnQuitar.

@@ -28,6 +28,10 @@ namespace TPIntegrador_SanchezEmanuel
                 gvProductos.DataBind();
                 Session["ProductosTemp"] = listaProductos;
                 Session["Carrito"] = carrito;
+
+                lvCarrito.DataSource = carrito;
+                lvCarrito.DataBind();
+                lblCarritoVacio.Visible = true;
             }
         }
 
@@ -98,8 +102,8 @@ namespace TPIntegrador_SanchezEmanuel
             List<ProductoBE> catalogo = (List<ProductoBE>)Session["ProductosTemp"];
             List<ItemCarritoBE> itemsAEliminar = new List<ItemCarritoBE>();
 
-            // Recorrer el ListView para ver cuáles tienen el Checkbox marcado
-            foreach (ListViewItem item in lvCarrito.Items)
+            // Recorrer el Repeater para ver cuáles tienen el Checkbox marcado
+            foreach (RepeaterItem item in lvCarrito.Items)
             {
                 CheckBox chk = (CheckBox)item.FindControl("chkSeleccion");
                 HiddenField hfID = (HiddenField)item.FindControl("hfID");
@@ -162,6 +166,7 @@ namespace TPIntegrador_SanchezEmanuel
 
             lvCarrito.DataSource = carrito;
             lvCarrito.DataBind();
+            lblCarritoVacio.Visible = carrito.Count == 0;
 
             // Mostramos el total usando "C" para formato de Moneda
             lblTotal.Text = total.ToString("C");

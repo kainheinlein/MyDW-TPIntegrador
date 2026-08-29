@@ -106,29 +106,24 @@
             <div class="panel cart-section">
                 <h2>2. Tu Pedido</h2>
                 
-                <asp:ListView ID="lvCarrito" runat="server">
-                    <LayoutTemplate>
-                        <div style="width:100%;">
-                            <div style="font-weight:bold; padding:5px; border-bottom:2px solid #333;">
-                                <span>Cant.</span> - <span>Producto</span> - <span>Precio</span>
+                <div style="width:100%;">
+                    <div style="font-weight:bold; padding:5px; border-bottom:2px solid #333;">
+                        <span>Cant.</span> - <span>Producto</span> - <span>Precio</span>
+                    </div>
+                    <asp:Repeater ID="lvCarrito" runat="server">
+                        <ItemTemplate>
+                            <div class="cart-item">
+                                <span>
+                                    <asp:CheckBox ID="chkSeleccion" runat="server" />
+                                    <strong><%# Eval("Cantidad") %> x</strong> <%# Eval("Producto") %>
+                                </span>
+                                <span><%# Eval("preUnitario", "{0:C}") %></span>
+                                <asp:HiddenField ID="hfID" runat="server" Value='<%# Eval("Codigo") %>' />
                             </div>
-                            <div id="itemPlaceholder" runat="server"></div>
-                        </div>
-                    </LayoutTemplate>
-                    <ItemTemplate>
-                        <div class="cart-item">
-                            <span>
-                                <asp:CheckBox ID="chkSeleccion" runat="server" />
-                                <strong><%# Eval("Cantidad") %> x</strong> <%# Eval("Producto") %>
-                            </span>
-                            <span><%# Eval("preUnitario", "{0:C}") %></span>
-                            <asp:HiddenField ID="hfID" runat="server" Value='<%# Eval("Codigo") %>' />
-                        </div>
-                    </ItemTemplate>
-                    <EmptyDataTemplate>
-                        <p style="color:#999; text-align:center; margin-top:20px;">El carrito está vacío.</p>
-                    </EmptyDataTemplate>
-                </asp:ListView>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                    <asp:Label ID="lblCarritoVacio" runat="server" Text="El carrito está vacío." Style="color:#999; text-align:center; margin-top:20px; display:block;"></asp:Label>
+                </div>
 
                 <asp:Button ID="btnQuitar" runat="server" Text="Quitar Seleccionados" CssClass="btn btn-remove" OnClick="btnQuitar_Click" />
 
